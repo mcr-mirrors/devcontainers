@@ -1,0 +1,6 @@
+mcr.microsoft.com:
+  images:
+    devcontainers/go: []
+    devcontainers/javascript-node: []
+    devcontainers/typescript-node: []
+    devcontainers/universal: []
