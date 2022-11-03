@@ -21,11 +21,12 @@ jobs:
         run: |
           podman run \
             -v ~/.docker/config.json:/auth.json:ro \
+            -v registries.yaml:/registries.yaml:ro \
             docker://quay.io/skopeo/stable:v1.10.0 sync \
             --all \
             --retry-times 3 \
             --authfile /auth.json \
             --src yaml \
             --dest docker \
-            repositories.yaml \
+            /repositories.yaml \
             ghcr.io/mcr-mirrors/devcontainers
