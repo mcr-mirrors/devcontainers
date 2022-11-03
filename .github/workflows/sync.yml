@@ -7,6 +7,24 @@ on:
 
 jobs:
   sync:
+    strategy:
+      matrix:
+       repo:
+       - aanaconda
+       - base
+       - cpp
+       - dotnet
+       - go
+       - java
+       - javascript-node
+       - jekyll
+       - miniconda
+       - php
+       - python
+       - ruby
+       - rust
+       - typescript-node
+       - universal
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -21,12 +39,11 @@ jobs:
         run: |
           podman run \
             -v ~/.docker/config.json:/auth.json:ro \
-            -v $PWD/repositories.yaml:/repositories.yaml:ro \
             docker://quay.io/skopeo/stable:v1.10.0 sync \
             --all \
             --retry-times 3 \
             --authfile /auth.json \
-            --src yaml \
+            --src docker \
             --dest docker \
-            /repositories.yaml \
+            mcr.microsoft.com/devcontainers/${{ matrix.repo }} \
             ghcr.io/mcr-mirrors/devcontainers
