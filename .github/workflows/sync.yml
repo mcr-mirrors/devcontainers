@@ -19,4 +19,4 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Sync
-        run: skopeo sync --src yaml --dest docker repositories.yaml ghcr.io/mcr-mirrors/devcontainers
+        run: skopeo sync --src yaml --dest docker repositories.yaml ghcr.io/mcr-mirrors/devcontainers --retry-times 3
