@@ -8,6 +8,8 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    container:
+      image: quay.io/skopeo/stable:v1.10.0
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -17,6 +19,5 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Sync
         run: skopeo sync --all --retry-times 3 --src yaml --dest docker repositories.yaml ghcr.io/mcr-mirrors/devcontainers
