@@ -8,9 +8,10 @@ on:
 jobs:
   sync:
     strategy:
+      fail-fast: false
       matrix:
        repo:
-       - aanaconda
+       - anaconda
        - base
        - cpp
        - dotnet
