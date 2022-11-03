@@ -37,14 +37,22 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Sync
+        id: sync
+        uses: nick-fields/retry@v2.8.2
+        with:
+          timeout_minutes: 360
+          max_attempts: 10
+          command: |
+            podman run \
+              -v ~/.docker/config.json:/auth.json:ro \
+              docker://quay.io/skopeo/stable:v1.10.0 sync \
+              --all \
+              --retry-times 10 \
+              --authfile /auth.json \
+              --src docker \
+              --dest docker \
+              mcr.microsoft.com/devcontainers/${{ matrix.repo }} \
+              ghcr.io/mcr-mirrors/devcontainers
+      - name: Report
         run: |
-          podman run \
-            -v ~/.docker/config.json:/auth.json:ro \
-            docker://quay.io/skopeo/stable:v1.10.0 sync \
-            --all \
-            --retry-times 3 \
-            --authfile /auth.json \
-            --src docker \
-            --dest docker \
-            mcr.microsoft.com/devcontainers/${{ matrix.repo }} \
-            ghcr.io/mcr-mirrors/devcontainers
+          echo "Total attempts: ${{ steps.sync.outputs.total_attempts }}"
